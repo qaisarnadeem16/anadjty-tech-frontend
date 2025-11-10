@@ -174,6 +174,177 @@ const ProductForm = ({
             </label>
           </div>
 
+          {/* --- Images --- */}
+          <section className="w-full">
+            <h2 className="font-semibold text-gray-700 mb-3">Product Images</h2>
+            <div className="space-y-4">
+              {/* Image Upload Input */}
+              <div className="flex flex-col sm:flex-row gap-4">
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  onChange={(e) => {
+                    const files = Array.from(e.target.files || []);
+                    if (files.length > 0) {
+                      // Limit total images to 10
+                      const remainingSlots = 10 - formData.images.length;
+                      if (remainingSlots <= 0) {
+                        alert("Maximum 10 images allowed. Please remove some images first.");
+                        if (e.target) {
+                          e.target.value = "";
+                        }
+                        return;
+                      }
+
+                      const filesToProcess = files.slice(0, remainingSlots);
+                      filesToProcess.forEach((file) => {
+                        if (file.size > 5 * 1024 * 1024) {
+                          alert(`${file.name} is too large. Maximum size is 5MB.`);
+                          return;
+                        }
+                        const reader = new FileReader();
+                        reader.onloadend = () => {
+                          const imageUrl = reader.result as string;
+                          if (!formData.images.includes(imageUrl)) {
+                            setFormData({
+                              ...formData,
+                              images: [...formData.images, imageUrl],
+                            });
+                          }
+                        };
+                        reader.readAsDataURL(file);
+                      });
+
+                      if (files.length > remainingSlots) {
+                        alert(`Only ${remainingSlots} image(s) added. Maximum 10 images allowed.`);
+                      }
+                    }
+                    // Reset input
+                    if (e.target) {
+                      e.target.value = "";
+                    }
+                  }}
+                  className="hidden"
+                  disabled={uploading || submitting || loadingCategories}
+                />
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  disabled={uploading || submitting || loadingCategories}
+                  className="px-4 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-md border border-gray-300 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                >
+                  <Plus size={16} />
+                  Upload Images
+                </button>
+                
+                {/* Image URL Input */}
+                <div className="flex-1">
+                  <CustomInput
+                    placeholder="Or enter image URL"
+                    type="url"
+                    value={formData.imageUrlInput || ""}
+                    onChange={(e) => {
+                      setFormData({ ...formData, imageUrlInput: e.target.value });
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" && formData.imageUrlInput?.trim()) {
+                        e.preventDefault();
+                        const url = formData.imageUrlInput.trim();
+                        if (formData.images.length >= 10) {
+                          alert("Maximum 10 images allowed. Please remove some images first.");
+                          return;
+                        }
+                        if (!formData.images.includes(url)) {
+                          setFormData({
+                            ...formData,
+                            images: [...formData.images, url],
+                            imageUrlInput: "",
+                          });
+                        } else {
+                          alert("This image URL is already added.");
+                          setFormData({ ...formData, imageUrlInput: "" });
+                        }
+                      }
+                    }}
+                    disabled={uploading || submitting || loadingCategories}
+                  />
+                </div>
+                {formData.imageUrlInput && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const url = formData.imageUrlInput?.trim();
+                      if (!url) return;
+                      if (formData.images.length >= 10) {
+                        alert("Maximum 10 images allowed. Please remove some images first.");
+                        return;
+                      }
+                      if (!formData.images.includes(url)) {
+                        setFormData({
+                          ...formData,
+                          images: [...formData.images, url],
+                          imageUrlInput: "",
+                        });
+                      } else {
+                        alert("This image URL is already added.");
+                        setFormData({ ...formData, imageUrlInput: "" });
+                      }
+                    }}
+                    disabled={uploading || submitting || loadingCategories || !formData.imageUrlInput?.trim()}
+                    className="px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    Add URL
+                  </button>
+                )}
+              </div>
+
+              {/* Image Preview Grid */}
+              {formData.images && formData.images.length > 0 && (
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 mt-4">
+                  {formData.images.map((image: string, index: number) => (
+                    <div
+                      key={index}
+                      className="relative group aspect-square border-2 border-gray-200 rounded-lg overflow-hidden bg-gray-100"
+                    >
+                      <img
+                        src={image}
+                        alt={`Product image ${index + 1}`}
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          e.currentTarget.src = "/placeholder.svg";
+                        }}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setFormData({
+                            ...formData,
+                            images: formData.images.filter((_: string, i: number) => i !== index),
+                          });
+                        }}
+                        disabled={uploading || submitting || loadingCategories}
+                        className="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white rounded-full p-1.5 opacity-0 group-hover:opacity-100 transition-opacity disabled:opacity-50"
+                        aria-label={`Remove image ${index + 1}`}
+                      >
+                        <X size={14} />
+                      </button>
+                      {index === 0 && (
+                        <div className="absolute bottom-2 left-2 bg-blue-600 text-white text-xs px-2 py-1 rounded">
+                          Primary
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
+              <p className="text-xs text-gray-500 mt-2">
+                First image will be used as the primary product image. Maximum 10 images. Max file size: 5MB per image.
+              </p>
+            </div>
+          </section>
+
           {/* --- Tags --- */}
           <section className="w-full ">
             <h2 className="font-semibold text-gray-700 mb-3">Features</h2>

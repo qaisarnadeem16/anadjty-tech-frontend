@@ -113,7 +113,7 @@ export default function CategoriesClientPage({ categories: apiCategories = [], p
             <div className="flex-1">
               <div className="flex items-center justify-between mb-6">
                 <p className="text-gray-600" aria-live="polite">
-                  Showing {filteredProducts.length} of {sampleProducts.length} products
+                  Showing {filteredProducts.length} of {apiProducts.length} products
                 </p>
                 <div className="flex items-center gap-2" role="group" aria-label="View mode selection">
                   <Button
@@ -143,12 +143,24 @@ export default function CategoriesClientPage({ categories: apiCategories = [], p
                   return (
                     <div
                       key={index}
-                      className="bg-white rounded-2xl shadow-md hover:shadow-lg transition-all duration-300 p-8 text-center group"
+                      className="bg-white rounded-2xl shadow-md hover:shadow-lg transition-all duration-300 p-8 text-center group overflow-hidden"
                     >
                       <div className="mb-6">
-                        <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto group-hover:bg-blue-200 transition-colors">
-                          <IconComponent className="h-8 w-8 text-blue-600" aria-hidden="true" />
-                        </div>
+                        {category.image ? (
+                          <div className="relative w-24 h-24 mx-auto rounded-full overflow-hidden border-2 border-gray-200 group-hover:border-blue-500 transition-colors">
+                            <Image
+                              src={category.image}
+                              alt={category.title}
+                              fill
+                              className="object-cover group-hover:scale-110 transition-transform duration-300"
+                              sizes="96px"
+                            />
+                          </div>
+                        ) : (
+                          <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto group-hover:bg-blue-200 transition-colors">
+                            <IconComponent className="h-8 w-8 text-blue-600" aria-hidden="true" />
+                          </div>
+                        )}
                       </div>
                       <h3 className="text-xl font-bold text-gray-900 mb-3">{category.title}</h3>
                       <p className="text-gray-600 mb-6">{category.description}</p>

@@ -167,6 +167,7 @@ const Categories = () => {
             }}
           >
             <TableHeader>
+              <TableColumn className="min-w-[120px]">Image</TableColumn>
               <TableColumn className="min-w-[120px]">Name</TableColumn>
               <TableColumn className="min-w-[200px] max-w-[250px]">Products</TableColumn>
               <TableColumn className="min-w-[200px] max-w-[250px]">Date</TableColumn>
@@ -179,6 +180,26 @@ const Categories = () => {
                   key={category._id || category.id}
                   className="transition-all duration-200 hover:bg-gray-50"
                 >
+                  {/* Image */}
+                  <TableCell>
+                    {category.image ? (
+                      <div className="relative w-16 h-16 rounded-md overflow-hidden border border-gray-200">
+                        <img
+                          src={category.image}
+                          alt={category.name}
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            e.currentTarget.src = "/placeholder.svg";
+                          }}
+                        />
+                      </div>
+                    ) : (
+                      <div className="w-16 h-16 rounded-md bg-gray-100 border border-gray-200 flex items-center justify-center">
+                        <span className="text-xs text-gray-400">No Image</span>
+                      </div>
+                    )}
+                  </TableCell>
+
                   {/* Name */}
                   <TableCell className="font-medium text-gray-900">
                     {category.name}

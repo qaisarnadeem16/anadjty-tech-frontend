@@ -31,6 +31,7 @@ export default function CreateProductPage() {
     tags: [] as string[],
     specs: [] as string[],
     images: [] as string[],
+    imageUrlInput: "",
   });
 
   useEffect(() => {

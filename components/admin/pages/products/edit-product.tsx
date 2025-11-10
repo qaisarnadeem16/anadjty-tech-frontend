@@ -33,6 +33,7 @@ export default function EditProductPage() {
     tags: [] as string[],
     specs: [] as string[],
     images: [] as string[],
+    imageUrlInput: "",
   });
 
   useEffect(() => {

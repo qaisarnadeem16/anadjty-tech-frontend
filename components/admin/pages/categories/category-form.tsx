@@ -80,6 +80,38 @@ const CategoryForm = ({
             </label>
           </div>
 
+          {/* --- Image URL --- */}
+          <div className="grid md:grid-cols-2 gap-6">
+            <div className="relative">
+              <CustomInput
+                placeholder="Enter image URL (optional)"
+                value={formData.image || ""}
+                onChange={(e) =>
+                  setFormData({ ...formData, image: e.target.value })
+                }
+                disabled={submitting}
+              />
+              <label className="absolute left-4 -top-2.5 bg-white px-1 text-sm text-gray-600">
+                Image URL (Optional)
+              </label>
+            </div>
+            {formData.image && (
+              <div className="relative">
+                <div className="relative w-full h-48 border-2 border-gray-200 rounded-md overflow-hidden">
+                  <img
+                    src={formData.image}
+                    alt="Category preview"
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      e.currentTarget.src = "/placeholder.svg";
+                    }}
+                  />
+                </div>
+                <p className="text-xs text-gray-500 mt-1">Image Preview</p>
+              </div>
+            )}
+          </div>
+
           {/* --- Options --- */}
           <div className="flex items-center gap-4">
             <label className="flex items-center gap-2 cursor-pointer">
