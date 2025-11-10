@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://www.anadjytech.com
+
+# Sitemaps
+Sitemap: https://www.anadjytech.com/sitemap.xml
