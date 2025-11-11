@@ -34,7 +34,6 @@ export default function EditProductPage() {
     tags: [] as string[],
     specs: [] as string[],
     images: [] as string[],
-    imageUrlInput: "",
   });
 
   useEffect(() => {
@@ -111,19 +110,45 @@ export default function EditProductPage() {
   };
 
   const handleImageUpload = async (files: File[]) => {
+    if (!files || files.length === 0) {
+      toast.error("No files selected");
+      return;
+    }
+
     setUploading(true);
     try {
       const imageUrls = await uploadImages(files);
+      
+      if (imageUrls.length === 0) {
+        toast.error("No images were uploaded");
+        return;
+      }
+
       // Add uploaded Cloudinary URLs to formData
+      const newImages = [...formData.images, ...imageUrls];
       setFormData({
         ...formData,
-        images: [...formData.images, ...imageUrls],
+        images: newImages,
       });
+      
       toast.success(`${imageUrls.length} image(s) uploaded successfully`);
     } catch (error: any) {
       console.error("Error uploading images:", error);
-      toast.error(error.message || "Failed to upload images");
-      throw error;
+      
+      // Check if we have partial results (some succeeded, some failed)
+      if (error.partialResults && error.partialResults.length > 0) {
+        // Add successfully uploaded images even if some failed
+        const newImages = [...formData.images, ...error.partialResults];
+        setFormData({
+          ...formData,
+          images: newImages,
+        });
+        toast.error(error.message, { duration: 6000 });
+      } else {
+        // Complete failure - no images uploaded
+        const errorMessage = error.message || "Failed to upload images";
+        toast.error(errorMessage, { duration: 5000 });
+      }
     } finally {
       setUploading(false);
     }

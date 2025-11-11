@@ -257,68 +257,8 @@ const ProductForm = ({
                   className="px-4 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-md border border-gray-300 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                 >
                   <Plus size={16} />
-                  Upload Images
+                  {uploading ? "Uploading..." : "Upload Images"}
                 </button>
-                
-                {/* Image URL Input */}
-                <div className="flex-1">
-                  <CustomInput
-                    placeholder="Or enter image URL"
-                    type="url"
-                    value={formData.imageUrlInput || ""}
-                    onChange={(e) => {
-                      setFormData({ ...formData, imageUrlInput: e.target.value });
-                    }}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter" && formData.imageUrlInput?.trim()) {
-                        e.preventDefault();
-                        const url = formData.imageUrlInput.trim();
-                        if (formData.images.length >= 10) {
-                          alert("Maximum 10 images allowed. Please remove some images first.");
-                          return;
-                        }
-                        if (!formData.images.includes(url)) {
-                          setFormData({
-                            ...formData,
-                            images: [...formData.images, url],
-                            imageUrlInput: "",
-                          });
-                        } else {
-                          alert("This image URL is already added.");
-                          setFormData({ ...formData, imageUrlInput: "" });
-                        }
-                      }
-                    }}
-                    disabled={uploading || submitting || loadingCategories}
-                  />
-                </div>
-                {formData.imageUrlInput && (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      const url = formData.imageUrlInput?.trim();
-                      if (!url) return;
-                      if (formData.images.length >= 10) {
-                        alert("Maximum 10 images allowed. Please remove some images first.");
-                        return;
-                      }
-                      if (!formData.images.includes(url)) {
-                        setFormData({
-                          ...formData,
-                          images: [...formData.images, url],
-                          imageUrlInput: "",
-                        });
-                      } else {
-                        alert("This image URL is already added.");
-                        setFormData({ ...formData, imageUrlInput: "" });
-                      }
-                    }}
-                    disabled={uploading || submitting || loadingCategories || !formData.imageUrlInput?.trim()}
-                    className="px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    Add URL
-                  </button>
-                )}
               </div>
 
               {/* Image Preview Grid */}
@@ -361,7 +301,7 @@ const ProductForm = ({
                 </div>
               )}
               <p className="text-xs text-gray-500 mt-2">
-                First image will be used as the primary product image. Maximum 10 images. Max file size: 5MB per image.
+                First image will be used as the primary product image. Maximum 10 images. Max file size: 5MB per image. Supported formats: JPG, JPEG, PNG, WEBP.
               </p>
             </div>
           </section>
