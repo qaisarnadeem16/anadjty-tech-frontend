@@ -20,6 +20,7 @@ interface ProductFormProps {
   uploading: boolean;
   submitting: boolean;
   loadingCategories: boolean;
+  onImageUpload?: (files: File[]) => Promise<void>;
 }
 
 const ProductForm = ({
@@ -37,6 +38,7 @@ const ProductForm = ({
   uploading,
   submitting,
   loadingCategories,
+  onImageUpload,
 }: ProductFormProps) => {
   return (
     <div className="mx-auto shadow-lg border border-gray-200 rounded-2xl bg-white">
@@ -185,7 +187,7 @@ const ProductForm = ({
                   type="file"
                   accept="image/*"
                   multiple
-                  onChange={(e) => {
+                  onChange={async (e) => {
                     const files = Array.from(e.target.files || []);
                     if (files.length > 0) {
                       // Limit total images to 10
@@ -198,27 +200,46 @@ const ProductForm = ({
                         return;
                       }
 
-                      const filesToProcess = files.slice(0, remainingSlots);
-                      filesToProcess.forEach((file) => {
+                      // Validate file sizes
+                      const validFiles: File[] = [];
+                      for (const file of files) {
                         if (file.size > 5 * 1024 * 1024) {
                           alert(`${file.name} is too large. Maximum size is 5MB.`);
-                          return;
+                          continue;
                         }
-                        const reader = new FileReader();
-                        reader.onloadend = () => {
-                          const imageUrl = reader.result as string;
-                          if (!formData.images.includes(imageUrl)) {
-                            setFormData({
-                              ...formData,
-                              images: [...formData.images, imageUrl],
-                            });
-                          }
-                        };
-                        reader.readAsDataURL(file);
-                      });
+                        validFiles.push(file);
+                      }
 
-                      if (files.length > remainingSlots) {
-                        alert(`Only ${remainingSlots} image(s) added. Maximum 10 images allowed.`);
+                      const filesToProcess = validFiles.slice(0, remainingSlots);
+                      
+                      if (filesToProcess.length > 0) {
+                        // If onImageUpload callback is provided, use it (Cloudinary upload)
+                        if (onImageUpload) {
+                          try {
+                            await onImageUpload(filesToProcess);
+                          } catch (error: any) {
+                            alert(error.message || "Failed to upload images");
+                          }
+                        } else {
+                          // Fallback: use base64 (for preview only)
+                          filesToProcess.forEach((file) => {
+                            const reader = new FileReader();
+                            reader.onloadend = () => {
+                              const imageUrl = reader.result as string;
+                              if (!formData.images.includes(imageUrl)) {
+                                setFormData({
+                                  ...formData,
+                                  images: [...formData.images, imageUrl],
+                                });
+                              }
+                            };
+                            reader.readAsDataURL(file);
+                          });
+                        }
+
+                        if (files.length > remainingSlots) {
+                          alert(`Only ${remainingSlots} image(s) added. Maximum 10 images allowed.`);
+                        }
                       }
                     }
                     // Reset input

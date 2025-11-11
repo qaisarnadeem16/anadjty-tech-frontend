@@ -5,6 +5,7 @@ import { useRouter, useParams } from "next/navigation";
 import toast from "react-hot-toast";
 import { getProductById, updateProduct } from "@/lib/api/products";
 import { getCategories, Category } from "@/lib/api/categories";
+import { uploadImages } from "@/lib/api/upload";
 import ProductForm from "./product-form";
 
 export default function EditProductPage() {
@@ -109,6 +110,25 @@ export default function EditProductPage() {
     });
   };
 
+  const handleImageUpload = async (files: File[]) => {
+    setUploading(true);
+    try {
+      const imageUrls = await uploadImages(files);
+      // Add uploaded Cloudinary URLs to formData
+      setFormData({
+        ...formData,
+        images: [...formData.images, ...imageUrls],
+      });
+      toast.success(`${imageUrls.length} image(s) uploaded successfully`);
+    } catch (error: any) {
+      console.error("Error uploading images:", error);
+      toast.error(error.message || "Failed to upload images");
+      throw error;
+    } finally {
+      setUploading(false);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -184,6 +204,7 @@ export default function EditProductPage() {
         uploading={uploading}
         submitting={submitting}
         loadingCategories={loadingCategories}
+        onImageUpload={handleImageUpload}
       />
     </div>
   );
