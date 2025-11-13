@@ -5,6 +5,7 @@ import { useRouter, useParams } from "next/navigation";
 import toast from "react-hot-toast";
 import { getCategoryById, updateCategory } from "@/lib/api/categories";
 import CategoryForm from "./category-form";
+import { uploadImages } from "@/lib/api/upload";
 
 export default function EditCategoryPage() {
   const router = useRouter();
@@ -19,6 +20,7 @@ export default function EditCategoryPage() {
     featured: false,
     published: true,
   });
+  const [uploading, setUploading] = useState(false);
 
   useEffect(() => {
     if (categoryId) {
@@ -31,7 +33,7 @@ export default function EditCategoryPage() {
       setLoading(true);
       const response = await getCategoryById(categoryId);
       const category = response.category;
-      
+
       setFormData({
         name: category.name || "",
         description: category.description || "",
@@ -76,6 +78,20 @@ export default function EditCategoryPage() {
     }
   };
 
+  const handleSingleImageUpload = async (files: File[]) => {
+    setUploading(true);
+    try {
+      const imageUrls = await uploadImages(files);
+      // Only one image
+      setFormData({ ...formData, image: imageUrls[0] });
+      toast.success("Image uploaded successfully");
+    } catch (error: any) {
+      toast.error(error.message || "Failed to upload image");
+    } finally {
+      setUploading(false);
+    }
+  };
+
   if (loading) {
     return (
       <div className="p-4 sm:p-6 bg-gray-50 flex items-center justify-center min-h-screen">
@@ -93,6 +109,8 @@ export default function EditCategoryPage() {
         formData={formData}
         setFormData={setFormData}
         submitting={submitting}
+        onImageUpload={handleSingleImageUpload}
+        uploading={uploading}
       />
     </div>
   );

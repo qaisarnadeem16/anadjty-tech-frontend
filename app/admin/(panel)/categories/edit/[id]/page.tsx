@@ -1,7 +1,7 @@
 import EditCategoryPage from '@/components/admin/pages/categories/edit-category'
 import React from 'react'
 
-const page = () => {
+const Page = () => {
   return (
     <div>
       <EditCategoryPage/>
@@ -9,5 +9,5 @@ const page = () => {
   )
 }
 
-export default page
+export default Page
 

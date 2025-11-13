@@ -9,13 +9,13 @@ interface LayoutProps {
 
 const layout: React.FC<LayoutProps> = ({ children }) => {
     return (
-        <ErrorBoundary>
+        // <ErrorBoundary>
             <ProtectedRoute>
                 <DashboardLayout>
                     {children}
                 </DashboardLayout>
             </ProtectedRoute>
-        </ErrorBoundary>
+        // </ErrorBoundary>
     )
 }
 

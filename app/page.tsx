@@ -1,7 +1,6 @@
 import SiteHeader from "@/components/site-header"
 import Hero from "@/components/hero"
 import FeatureBar from "@/components/feature-bar"
-import FeaturedRows from "@/components/featured-rows"
 import Newsletter from "@/components/newsletter"
 import Footer from "@/components/footer"
 import NewArrivalsCarousel from "@/components/new-arrivals-carousel"
@@ -14,7 +13,8 @@ import type { Metadata } from "next"
 import ScrollToTop from "@/components/ui/scrollToTop"
 import { getFeaturedProducts, getProducts } from "@/lib/api/products"
 import { getFeaturedCategories } from "@/lib/api/categories"
-import { getFeaturedBlogs } from "@/lib/api/blogs"
+import Features from "@/components/features"
+// import { getFeaturedBlogs } from "@/lib/api/blogs"
 
 export const metadata: Metadata = {
   title: "AnadjyTech — Smart Tech & Gadgets Picks (2025)",
@@ -48,12 +48,12 @@ export const metadata: Metadata = {
   },
 }
 
-export default async function page() {
+export default async function Page() {
   // Fetch data for home page
   let featuredProducts: any[] = []
   let newArrivals: any[] = []
   let featuredCategories: any[] = []
-  let featuredBlogs: any[] = []
+  // let featuredBlogs: any[] = []
   let smartHomeProducts: any[] = []
   let usbcProducts: any[] = []
   let editorProducts: any[] = []
@@ -69,10 +69,10 @@ export default async function page() {
 
     // Fetch new arrivals (recent products)
     try {
-      const newArrivalsRes = await getProducts({ 
-        published: true, 
-        limit: 10, 
-        sort: "-createdAt" 
+      const newArrivalsRes = await getProducts({
+        published: true,
+        limit: 10,
+        sort: "-createdAt"
       })
       newArrivals = newArrivalsRes?.items || []
     } catch (error) {
@@ -88,23 +88,23 @@ export default async function page() {
     }
 
     // Fetch featured blogs
-    try {
-      const featuredBlogsRes = await getFeaturedBlogs(6)
-      featuredBlogs = featuredBlogsRes?.blogs || []
-    } catch (error) {
-      console.error("Error fetching featured blogs:", error)
-    }
+    // try {
+    //   const featuredBlogsRes = await getFeaturedBlogs(6)
+    //   featuredBlogs = featuredBlogsRes?.blogs || []
+    // } catch (error) {
+    //   console.error("Error fetching featured blogs:", error)
+    // }
 
     // Fetch smart home products (by category)
     try {
-      const smartHomeCategory = featuredCategories.find((cat: any) => 
+      const smartHomeCategory = featuredCategories.find((cat: any) =>
         cat?.name?.toLowerCase().includes('smart') || cat?.slug?.includes('smart-home')
       )
       if (smartHomeCategory) {
-        const smartHomeRes = await getProducts({ 
+        const smartHomeRes = await getProducts({
           category: smartHomeCategory._id || smartHomeCategory.id,
           published: true,
-          limit: 6 
+          limit: 6
         })
         smartHomeProducts = smartHomeRes?.items || []
       }
@@ -114,14 +114,14 @@ export default async function page() {
 
     // Fetch USB-C products (by category)
     try {
-      const usbcCategory = featuredCategories.find((cat: any) => 
+      const usbcCategory = featuredCategories.find((cat: any) =>
         cat?.name?.toLowerCase().includes('usb') || cat?.slug?.includes('usb-c')
       )
       if (usbcCategory) {
-        const usbcRes = await getProducts({ 
+        const usbcRes = await getProducts({
           category: usbcCategory._id || usbcCategory.id,
           published: true,
-          limit: 6 
+          limit: 6
         })
         usbcProducts = usbcRes?.items || []
       }
@@ -140,10 +140,10 @@ export default async function page() {
       <SiteHeader />
       <Hero />
       <FeatureBar />
-      <FeaturedRows 
+      {/* <FeaturedRows
         featuredCategories={featuredCategories}
-        featuredBlogs={featuredBlogs}
-      />
+      /> */}
+      <Features featuredCategories={featuredCategories}/>
       <NewArrivalsCarousel products={newArrivals} />
       <SmartHomeMustHaves products={smartHomeProducts} />
       <UsbcAccessories products={usbcProducts} />

@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
-import { getMe } from "@/lib/api/auth";
+// import { getMe } from "@/lib/api/auth";
 import toast from "react-hot-toast";
 
 interface ProtectedRouteProps {
@@ -13,48 +13,49 @@ interface ProtectedRouteProps {
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, roles }) => {
   const router = useRouter();
   const pathname = usePathname();
-  const [isAuthorized, setIsAuthorized] = useState(false);
+  // const [isAuthorized, setIsAuthorized] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const checkAuth = async () => {
       try {
         const token = localStorage.getItem("token");
-        
+
         if (!token) {
           toast.error("Please login to access this page");
           router.push("/admin");
           return;
         }
 
-        // Verify token by fetching user data
-        const response = await getMe();
-        
-        if (!response?.success || !response?.user) {
-          localStorage.removeItem("token");
-          localStorage.removeItem("user");
-          toast.error("Session expired. Please login again");
-          router.push("/admin");
-          return;
-        }
+        // // Verify token by fetching user data
+        // const response = await getMe();
 
-        // Check role-based access
-        if (roles && roles.length > 0) {
-          if (!roles.includes(response.user.role)) {
-            toast.error("You don't have permission to access this page");
-            router.push("/admin/home");
-            return;
-          }
-        }
+        // if (!response?.success || !response?.user) {
+        //   localStorage.removeItem("token");
+        //   localStorage.removeItem("user");
+        //   toast.error("Session expired. Please login again");
+        //   router.push("/admin");
+        //   return;
+        // }
+
+        // // Check role-based access
+        // if (roles && roles.length > 0) {
+        //   if (!roles.includes(response.user.role)) {
+        //     toast.error("You don't have permission to access this page");
+        //     router.push("/admin/home");
+        //     return;
+        //   }
+        // }
 
         // Store user data
-        localStorage.setItem("user", JSON.stringify(response.user));
-        setIsAuthorized(true);
+        // localStorage.setItem("user", JSON.stringify(response.user));
+        // setIsAuthorized(true);
+
       } catch (error: any) {
         console.error("Auth check failed:", error);
         localStorage.removeItem("token");
         localStorage.removeItem("user");
-        
+
         // Don't redirect if already on login page
         if (pathname !== "/admin") {
           toast.error("Session expired. Please login again");
@@ -79,9 +80,9 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, roles }) => {
     );
   }
 
-  if (!isAuthorized) {
-    return null;
-  }
+  // if (!isAuthorized) {
+  //   return null;
+  // }
 
   return <>{children}</>;
 };

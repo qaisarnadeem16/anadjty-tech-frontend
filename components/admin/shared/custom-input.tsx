@@ -12,10 +12,14 @@ type CustomInputProps = {
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
   name?: string;
+  step?: string;
+  min?: string;
   error?: string | null | false;
   className?: string;
   showLabelOnFocus?: boolean;
   disabled?: boolean;
+  required?: boolean;
+  onKeyDown?: any;
 };
 
 const CustomInput = (props: CustomInputProps) => {
@@ -29,9 +33,13 @@ const CustomInput = (props: CustomInputProps) => {
     onBlur,
     name,
     error,
+    min,
     className,
     showLabelOnFocus = true,
-    disabled
+    disabled,
+    required,
+    step,
+    onKeyDown
   } = props;
 
   const [showPassword, setShowPassword] = useState(false);
@@ -49,8 +57,12 @@ const CustomInput = (props: CustomInputProps) => {
           placeholder={placeholder}
           value={value}
           onChange={onChange}
+          step={step}
+          min={min}
           disabled={disabled}
           onFocus={() => setIsFocused(true)}
+          required={required}
+          onKeyDown={onKeyDown}
           onBlur={(e) => {
             setIsFocused(false);
             onBlur?.(e);

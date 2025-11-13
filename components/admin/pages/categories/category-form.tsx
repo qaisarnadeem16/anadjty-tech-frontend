@@ -2,15 +2,18 @@
 import React from "react";
 import CustomInput from "../../shared/custom-input";
 import Button from "../../shared/custom-btn";
+import SingleImageUploader from "../../shared/single-image-uplaoder";
 
 interface CategoryFormProps {
   isEditMode: boolean;
+  uploading: boolean;
   submitButtonLabel: string;
+  onImageUpload?: (files: File[]) => Promise<void>;
   handleSubmit: (e: React.FormEvent) => void;
-  formData: { 
+  formData: {
     name: string;
     description?: string;
-    image?: string;
+    image: string;
     featured?: boolean;
     published?: boolean;
   };
@@ -20,6 +23,8 @@ interface CategoryFormProps {
 
 const CategoryForm = ({
   isEditMode,
+  uploading,
+  onImageUpload,
   submitButtonLabel,
   handleSubmit,
   formData,
@@ -81,7 +86,14 @@ const CategoryForm = ({
           </div>
 
           {/* --- Image URL --- */}
-          <div className="grid md:grid-cols-2 gap-6">
+          <SingleImageUploader
+            image={formData.image}
+            setImage={(image) => setFormData({ ...formData, image })}
+            onImageUpload={onImageUpload}
+            uploading={uploading}
+          />
+
+          {/* <div className="grid md:grid-cols-2 gap-6">
             <div className="relative">
               <CustomInput
                 placeholder="Enter image URL (optional)"
@@ -110,7 +122,7 @@ const CategoryForm = ({
                 <p className="text-xs text-gray-500 mt-1">Image Preview</p>
               </div>
             )}
-          </div>
+          </div> */}
 
           {/* --- Options --- */}
           <div className="flex items-center gap-4">

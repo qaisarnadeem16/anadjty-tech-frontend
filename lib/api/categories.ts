@@ -7,7 +7,7 @@ export interface Category {
   name: string;
   slug: string;
   description?: string;
-  image?: string;
+  image: string;
   parentCategory?: string | Category;
   featured: boolean;
   published: boolean;
