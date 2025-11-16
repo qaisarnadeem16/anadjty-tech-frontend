@@ -60,9 +60,6 @@ export default function EditorsPicks({ products: apiProducts = [] }: EditorsPick
 
                   <p className="text-gray-600 text-sm mb-3 line-clamp-2">{product.shortDescription || product.description}</p>
 
-                  {/* Price */}
-                  <p className="text-lg font-bold text-blue-900 mb-3">${product.price}</p>
-
                   {/* Specs */}
                   {product.specs && product.specs.length > 0 && (
                     <div className="mb-4">

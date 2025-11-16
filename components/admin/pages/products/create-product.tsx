@@ -22,7 +22,8 @@ export default function CreateProductPage() {
     categoryId: "",
     description: "",
     shortDescription: "",
-    price: "",
+    amazonLink: "",
+    amazonUrl: "",
     quantity: "",
     stock: "",
     status: "active",
@@ -111,9 +112,9 @@ export default function CreateProductPage() {
       return;
     }
 
-    if (!formData.price || Number(formData.price) <= 0) {
-      setErrors([{ field: 'price', message: 'Product price is required and must be greater than 0' }]);
-      toast.error("Product price is required and must be greater than 0");
+    if (!formData.amazonLink && !formData.amazonUrl) {
+      setErrors([{ field: 'amazonLink', message: 'Amazon link is required' }]);
+      toast.error("Amazon link is required");
       return;
     }
 
@@ -127,7 +128,8 @@ export default function CreateProductPage() {
         name: formData.name.trim(),
         description: formData.description.trim(),
         shortDescription: formData.shortDescription?.trim() || formData.description.trim(),
-        price: Number(formData.price),
+        amazonLink: formData.amazonLink?.trim() || formData.amazonUrl?.trim() || "",
+        amazonUrl: formData.amazonUrl?.trim() || formData.amazonLink?.trim() || "",
         stock: formData.stock ? Number(formData.stock) : (formData.quantity ? Number(formData.quantity) : 0),
         quantity: formData.quantity ? Number(formData.quantity) : (formData.stock ? Number(formData.stock) : 0),
         status: formData.status || "active",

@@ -143,9 +143,6 @@ export default function NewArrivalsCarousel({ products: apiProducts = [] }: NewA
                       {/* Description */}
                       <p className="text-sm text-gray-600 mb-3 line-clamp-2 flex-grow">{product.shortDescription || product.description}</p>
 
-                      {/* Price */}
-                      <p className="text-lg font-bold text-blue-900 mb-3">${product.price}</p>
-
                       {/* Buy Button */}
                       {product.amazonUrl || product.amazonLink ? (
                         <Link

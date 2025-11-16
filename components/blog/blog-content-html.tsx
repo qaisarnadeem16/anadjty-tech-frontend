@@ -77,7 +77,7 @@ export default function BlogContentHTML({ post }: BlogContentProps) {
             {post.author && (
               <div className="flex items-center gap-2">
                 <User className="h-4 w-4" />
-                <span>{post.author}</span>
+                <span>{typeof post.author === 'object' ? post.author?.name || 'AnadjyTech' : post.author}</span>
               </div>
             )}
             {post.publishedAt && (

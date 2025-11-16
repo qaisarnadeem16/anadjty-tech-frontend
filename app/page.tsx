@@ -12,7 +12,6 @@ import MobileCTA from "@/components/MobileCTA"
 import type { Metadata } from "next"
 import ScrollToTop from "@/components/ui/scrollToTop"
 import { getFeaturedProducts, getProducts } from "@/lib/api/products"
-import { getFeaturedCategories } from "@/lib/api/categories"
 import Features from "@/components/features"
 // import { getFeaturedBlogs } from "@/lib/api/blogs"
 
@@ -143,7 +142,7 @@ export default async function Page() {
       {/* <FeaturedRows
         featuredCategories={featuredCategories}
       /> */}
-      <Features featuredCategories={featuredCategories}/>
+      <Features />
       <NewArrivalsCarousel products={newArrivals} />
       <SmartHomeMustHaves products={smartHomeProducts} />
       <UsbcAccessories products={usbcProducts} />
