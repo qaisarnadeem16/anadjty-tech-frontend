@@ -161,7 +161,17 @@ export default function ProductsClientPage({
                       <p className="text-sm text-gray-600 mb-2 line-clamp-2">
                         {product.shortDescription || product.description}
                       </p>
-                      <p className="text-lg font-bold text-blue-900">${product.price}</p>
+                      {product.amazonUrl || product.amazonLink ? (
+                        <Link
+                          href={product.amazonUrl || product.amazonLink || "#"}
+                          target="_blank"
+                          rel="noreferrer nofollow sponsored noopener"
+                          onClick={(e) => e.stopPropagation()}
+                          className="inline-block mt-2 bg-[#0066cc] hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors text-sm"
+                        >
+                          Check on Amazon
+                        </Link>
+                      ) : null}
                       {product.rating && (
                         <div className="flex items-center mt-2">
                           <span className="text-yellow-400 text-sm">★</span>

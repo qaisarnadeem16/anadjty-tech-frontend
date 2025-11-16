@@ -27,7 +27,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         description: blog.excerpt,
         type: "article",
         publishedTime: blog.publishedAt,
-        authors: blog.author ? [blog.author.name] : [],
+        authors: blog.author ? [typeof blog.author === 'object' ? blog.author.name : blog.author] : [],
         images: blog.hero || blog.image || blog.thumbnail ? [
           {
             url: blog.hero || blog.image || blog.thumbnail || "",
@@ -69,7 +69,7 @@ export default async function BlogPostPage({ params }: PageProps) {
       image: blog.hero || blog.image || blog.thumbnail,
       author: blog.author ? {
         "@type": "Person",
-        name: blog.author.name,
+        name: typeof blog.author === 'object' ? blog.author.name : blog.author,
       } : {
         "@type": "Organization",
         name: "AnadjyTech",

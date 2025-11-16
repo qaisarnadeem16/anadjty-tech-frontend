@@ -136,7 +136,7 @@ export default function BlogClientPage({
                 />
                 <div className="flex items-center justify-between mt-4">
                   <p className="text-gray-600" aria-live="polite">
-                    Showing {gridPosts.length} of {allPosts.length} posts
+                    Showing {gridPosts.length} of {total > 0 ? total : filteredPosts.length} posts
                   </p>
                 </div>
               </div>
@@ -183,7 +183,7 @@ export default function BlogClientPage({
                             <div className="md:w-1/2 p-8 flex flex-col justify-center">
                               <div className="flex items-center gap-2 text-sm text-gray-500 mb-4">
                                 <User className="w-4 h-4" aria-hidden="true" />
-                                <span>{featuredPost.author}</span>
+                                <span>{featuredPost.author?.name || featuredPost.author || "AnadjyTech"}</span>
                                 <span aria-hidden="true">•</span>
                                 <Calendar className="w-4 h-4" aria-hidden="true" />
                                 <time dateTime={featuredPost.publishedAt}>

@@ -622,7 +622,15 @@ export default function BlogContent() {
                       <div className="md:w-1/2 p-8 flex flex-col justify-center">
                         <div className="flex items-center gap-2 text-sm text-gray-500 mb-4">
                           <User className="w-4 h-4" />
-                          <span>{featuredPost.author}</span>
+                          <span>{(() => {
+                            const author = featuredPost.author;
+                            if (!author) return 'AnadjyTech';
+                            if (typeof author === 'string') return author;
+                            if (typeof author === 'object' && author !== null && 'name' in author) {
+                              return (author as { name: string }).name || 'AnadjyTech';
+                            }
+                            return 'AnadjyTech';
+                          })()}</span>
                           <span>•</span>
                           <Calendar className="w-4 h-4" />
                           <span>{new Date(featuredPost.publishedAt).toLocaleDateString()}</span>
@@ -682,7 +690,15 @@ export default function BlogContent() {
                           <div className="flex items-center justify-between mb-3">
                             <div className="flex items-center gap-2 text-xs text-gray-500">
                               <User className="w-3 h-3" />
-                              <span>{post.author}</span>
+                              <span>{(() => {
+                                const author = post.author;
+                                if (!author) return 'AnadjyTech';
+                                if (typeof author === 'string') return author;
+                                if (typeof author === 'object' && author !== null && 'name' in author) {
+                                  return (author as { name: string }).name || 'AnadjyTech';
+                                }
+                                return 'AnadjyTech';
+                              })()}</span>
                               <span>•</span>
                               <Calendar className="w-3 h-3" />
                               <span>{new Date(post.publishedAt).toLocaleDateString()}</span>

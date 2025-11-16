@@ -78,7 +78,17 @@ export default function CategoryDetail({ category, products }: CategoryDetailPro
                         {product.shortDescription}
                       </p>
                     )}
-                    <p className="text-blue-900 font-bold">${product.price}</p>
+                    {(product.amazonUrl || product.amazonLink) ? (
+                      <Link
+                        href={product.amazonUrl || product.amazonLink || "#"}
+                        target="_blank"
+                        rel="noreferrer nofollow sponsored noopener"
+                        onClick={(e) => e.stopPropagation()}
+                        className="inline-block mt-2 bg-[#0066cc] hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors text-sm"
+                      >
+                        Check on Amazon
+                      </Link>
+                    ) : null}
                     {product.rating && (
                       <div className="flex items-center mt-2">
                         <span className="text-yellow-400 text-sm">★</span>
