@@ -89,12 +89,18 @@ export default function ProductDetail({ product, relatedProducts = [] }: Product
             )}
           </div>
 
-          <div className="flex items-baseline space-x-4">
-            <span className="text-3xl font-bold text-blue-900">${product.price}</span>
-            {product.compareAtPrice && product.compareAtPrice > product.price && (
-              <span className="text-xl text-gray-500 line-through">${product.compareAtPrice}</span>
-            )}
-          </div>
+          {(product.amazonUrl || product.amazonLink) && (
+            <div className="mb-6">
+              <Link
+                href={product.amazonUrl || product.amazonLink || "#"}
+                target="_blank"
+                rel="noreferrer nofollow sponsored noopener"
+                className="inline-block bg-[#0066cc] hover:bg-blue-700 text-white font-bold text-lg py-4 px-8 rounded-lg transition-colors"
+              >
+                Check Price on Amazon
+              </Link>
+            </div>
+          )}
 
           <div className="prose max-w-none">
             <p className="text-gray-700">{product.description}</p>
@@ -178,7 +184,17 @@ export default function ProductDetail({ product, relatedProducts = [] }: Product
                     <h3 className="font-semibold text-gray-900 mb-2 group-hover:text-blue-900">
                       {relatedProduct.name}
                     </h3>
-                    <p className="text-blue-900 font-bold">${relatedProduct.price}</p>
+                    {(relatedProduct.amazonUrl || relatedProduct.amazonLink) ? (
+                      <Link
+                        href={relatedProduct.amazonUrl || relatedProduct.amazonLink || "#"}
+                        target="_blank"
+                        rel="noreferrer nofollow sponsored noopener"
+                        onClick={(e) => e.stopPropagation()}
+                        className="inline-block mt-2 bg-[#0066cc] hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors text-sm"
+                      >
+                        Check on Amazon
+                      </Link>
+                    ) : null}
                   </div>
                 </div>
               </Link>

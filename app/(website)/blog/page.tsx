@@ -46,7 +46,7 @@ const Page = async ({ searchParams }: Pageprops) => {
   const currentPage = parseInt(page || "1", 10);
 
   // Fetch blogs from API
-  let blogs = []
+  let blogs: any[] = []
   let total = 0
   let totalPages = 0
 
@@ -91,7 +91,7 @@ const Page = async ({ searchParams }: Pageprops) => {
 
     if (tags.length > 0) {
       blogs = blogs.filter((blog) => 
-        blog.tags?.some((blogTag) => 
+        blog.tags?.some((blogTag: string) => 
           tags.some((t) => blogTag.toLowerCase().includes(t.toLowerCase()))
         )
       )
@@ -104,7 +104,7 @@ const Page = async ({ searchParams }: Pageprops) => {
     <div className="min-h-screen pb-20 lg:pb-0">
       <SiteHeader />
       <BlogClientPage 
-        filteredPosts={blogs}
+        filteredPosts={blogs as any[]}
         total={total}
         totalPages={totalPages}
         currentPage={currentPage}

@@ -84,7 +84,7 @@ export default function BlogArticle({ post }: any) {
           <div className="flex flex-wrap justify-center gap-6 text-sm text-gray-500 dark:text-gray-400">
             <div className="flex items-center gap-2">
               <User className="w-4 h-4" />
-              <span>{post.author}</span>
+              <span>{typeof post.author === 'object' ? post.author?.name || 'AnadjyTech' : post.author}</span>
             </div>
             <div className="flex items-center gap-2">
               <Calendar className="w-4 h-4" />

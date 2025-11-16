@@ -90,13 +90,11 @@ const ProductForm = ({
             </CustomSelect>
 
             <CustomInput
-              placeholder="Enter price"
-              type="number"
-              step="0.01"
-              min="0"
-              value={formData.price}
+              placeholder="Enter Amazon Link (e.g., https://amazon.com/dp/...)"
+              type="url"
+              value={formData.amazonLink || formData.amazonUrl || ""}
               onChange={(e) =>
-                setFormData({ ...formData, price: e.target.value })
+                setFormData({ ...formData, amazonLink: e.target.value, amazonUrl: e.target.value })
               }
               disabled={uploading || submitting || loadingCategories}
               required

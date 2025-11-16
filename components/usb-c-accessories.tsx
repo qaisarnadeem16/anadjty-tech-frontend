@@ -60,9 +60,6 @@ export default function UsbcAccessories({ products: apiProducts = [] }: UsbcAcce
                   </Link>
                   <p className="text-gray-600 mb-4 line-clamp-2">{product.shortDescription || product.description}</p>
 
-                  {/* Price */}
-                  <p className="text-lg font-bold text-blue-900 mb-4">${product.price}</p>
-
                   {/* Specs */}
                   {product.specs && product.specs.length > 0 && (
                     <ul className="space-y-1 mb-4">
