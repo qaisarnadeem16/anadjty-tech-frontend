@@ -1,8 +1,6 @@
 import { withContentlayer } from 'next-contentlayer'
-import { createRequire } from 'module';
 
 /** @type {import('next').NextConfig} */
-const require = createRequire(import.meta.url);
 const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
